@@ -16,8 +16,7 @@ const HomePage = () => {
 
   return (
     <div>
-      <h1>Home</h1>
-      {authState.status === "succeeded" ? (
+      {/* {authState.status === "succeeded" ? (
         <div className="text-blue">
           <p>{authState.name}</p>
           <button onClick={() => dispatch(logout())} className="bg-red-600">
@@ -26,7 +25,7 @@ const HomePage = () => {
         </div>
       ) : (
         <p>Redirecting to login...</p>
-      )}
+      )} */}
     </div>
   );
 };
