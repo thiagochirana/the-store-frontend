@@ -7,7 +7,7 @@ const CreatePayment = () => {
     customer_name: "",
     customer_email: "",
     value: "",
-    gateway_used: "",
+    gateway_used: "mercado_pago",
     custom_commission_percent: "",
   });
   const [loading, setLoading] = useState(false);
@@ -68,84 +68,83 @@ const CreatePayment = () => {
   };
 
   return (
-    <div className="max-w-lg mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Criar Pagamento</h1>
-      {message && <p className="mt-4 text-red-500">{message}</p>}
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block font-medium mb-1">ID do Vendedor</label>
-          <select
-            name="salesperson_id"
-            value={formData.salesperson_id}
-            onChange={handleFilterChange}
-            className="inputStyle"
-          >
-            <option value="">Sem vendedor</option>
-            {salespersons.map((salesperson) => (
-              <option key={salesperson.id} value={salesperson.id}>
-                {salesperson.name} ({salesperson.id})
-              </option>
-            ))}
-          </select>
+    <div>
+      <form onSubmit={handleSubmit} className="formStyle">
+        {message && <p className="mt-4 text-red-500">{message}</p>}
+
+        <h1 className="text-2xl font-bold">Criar Pagamento</h1>
+
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <label>Vendedor</label>
+            <select
+              name="salesperson_id"
+              value={formData.salesperson_id}
+              onChange={handleFilterChange}
+            >
+              <option value="">Sem vendedor</option>
+              {salespersons.map((salesperson) => (
+                <option key={salesperson.id} value={salesperson.id}>
+                  {salesperson.name} ({salesperson.id})
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label>Comissão Personalizada (%)</label>
+            <input
+              type="number"
+              name="custom_commission_percent"
+              value={formData.custom_commission_percent}
+              onChange={handleChange}
+              placeholder="Comissão Personalizada (%)"
+            />
+          </div>
         </div>
+
         <div>
-          <label className="block font-medium mb-1">Nome do Cliente</label>
+          <label>Nome do Cliente</label>
           <input
             type="text"
             name="customer_name"
             value={formData.customer_name}
             onChange={handleChange}
-            placeholder="Nome do Cliente"
-            className="w-full p-2 border border-gray-300 rounded"
+            placeholder="Nome"
           />
         </div>
         <div>
-          <label className="block font-medium mb-1">Email do Cliente</label>
+          <label>Email do Cliente</label>
           <input
             type="email"
             name="customer_email"
             value={formData.customer_email}
             onChange={handleChange}
-            placeholder="Email do Cliente"
-            className="w-full p-2 border border-gray-300 rounded"
+            placeholder="Email"
           />
         </div>
         <div>
-          <label className="block font-medium mb-1">Telefone do Cliente</label>
+          <label>Telefone do Cliente</label>
           <input
             type="text"
             name="customer_telephone"
             value={formData.customer_telephone}
             onChange={handleChange}
             placeholder="Telefone"
-            className="w-full p-2 border border-gray-300 rounded"
           />
         </div>
         <div>
-          <label className="block font-medium mb-1">Valor</label>
+          <label>Valor</label>
           <input
             type="number"
             name="value"
             value={formData.value}
             onChange={handleChange}
-            placeholder="Valor da Venda"
-            className="w-full p-2 border border-gray-300 rounded"
+            placeholder="R$"
           />
         </div>
+
         <div>
-          <label className="block font-medium mb-1">
-            Comissão Personalizada (%)
-          </label>
-          <input
-            type="number"
-            name="custom_commission_percent"
-            value={formData.custom_commission_percent}
-            onChange={handleChange}
-            placeholder="Comissão Personalizada (%)"
-            className="w-full p-2 border border-gray-300 rounded"
-          />
-        </div>
-        <div>
+          <label>Gateway de Pagamento</label>
           <select
             name="gateway_used"
             value={formData.gateway_used}
