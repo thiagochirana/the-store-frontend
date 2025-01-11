@@ -30,7 +30,7 @@ const Sales = () => {
     const fetchSalespersons = async () => {
       try {
         const response = await ApiRb.get("/shopowner/salespersons");
-        setSalespersons(response.data);
+        setSalespersons(response.data.salespersons);
       } catch (error) {
         console.error(
           "Error fetching salespersons:",

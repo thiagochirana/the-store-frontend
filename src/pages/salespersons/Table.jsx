@@ -29,21 +29,37 @@ const Salespersons = () => {
         }
         return acc;
       }, {});
-
+  
       const params = new URLSearchParams({
         ...filterParams,
         page: pagination.current_page,
         per_page: pagination.per_page,
       });
-
+  
       const response = await ApiRb.get(`/shopowner/salespersons?${params.toString()}`);
-
-      const { salespersons, pagination: pag } = response.data;
-
-      setData(salespersons || []);
-      setPagination(pag || pagination);
+      console.log("passou aqui, agora imprimir resposta da API")
+      console.log(response.data)
+      // Verifica se a resposta é um array vazio ou um objeto com a estrutura esperada
+      if (Array.isArray(response.data)) {
+        setData([]);
+        setPagination({
+          current_page: 1,
+          per_page: 10,
+          total_pages: 1,
+          total_records: 0,
+        });
+      } else {
+        setData(response.data.salespersons || []);
+        setPagination(response.data.pagination || {
+          current_page: 1,
+          per_page: 10,
+          total_pages: 1,
+          total_records: 0,
+        });
+      }
     } catch (error) {
       console.error(error.response?.data?.errors);
+      setData([]);
     } finally {
       setLoading(false);
     }

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import ApiRb from "../../services/BackendService";
 
 const EditSalesperson = () => {
   const { id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -39,7 +39,7 @@ const EditSalesperson = () => {
     e.preventDefault();
     try {
       await ApiRb.put(`/shopowner/salespersons/${id}`, formData);
-      history.push("/vendedores");
+      navigate.push("/vendedores");
     } catch (error) {
       console.error("Erro ao editar vendedor:", error);
     }
