@@ -10,7 +10,7 @@ const Salespersons = () => {
   const [data, setData] = useState([]);
   const [pagination, setPagination] = useState({
     current_page: 1,
-    per_page: 10,
+    per_page: 8,
     total_pages: 1,
     total_records: 0,
   });
@@ -29,16 +29,16 @@ const Salespersons = () => {
         }
         return acc;
       }, {});
-  
+
       const params = new URLSearchParams({
         ...filterParams,
         page: pagination.current_page,
         per_page: pagination.per_page,
       });
-  
-      const response = await ApiRb.get(`/shopowner/salespersons?${params.toString()}`);
-      console.log("passou aqui, agora imprimir resposta da API")
-      console.log(response.data)
+
+      const response = await ApiRb.get(
+        `/shopowner/salespersons?${params.toString()}`
+      );
       // Verifica se a resposta é um array vazio ou um objeto com a estrutura esperada
       if (Array.isArray(response.data)) {
         setData([]);
@@ -50,12 +50,14 @@ const Salespersons = () => {
         });
       } else {
         setData(response.data.salespersons || []);
-        setPagination(response.data.pagination || {
-          current_page: 1,
-          per_page: 10,
-          total_pages: 1,
-          total_records: 0,
-        });
+        setPagination(
+          response.data.pagination || {
+            current_page: 1,
+            per_page: 10,
+            total_pages: 1,
+            total_records: 0,
+          }
+        );
       }
     } catch (error) {
       console.error(error.response?.data?.errors);
@@ -82,17 +84,16 @@ const Salespersons = () => {
 
   return (
     <div className="container mx-auto px-4">
-      <h1 className="text-2xl font-bold my-4">Salespersons</h1>
+      <h1 className="text-2xl font-bold my-4">Vendedores</h1>
 
       {/* Filtros */}
-      <div className="mb-4">
+      <div className="filterStyle">
         <input
           type="text"
           name="name"
           value={filters.name}
           onChange={handleFilterChange}
           placeholder="Nome"
-          className="inputStyle"
         />
         <input
           type="email"
@@ -100,7 +101,6 @@ const Salespersons = () => {
           value={filters.email}
           onChange={handleFilterChange}
           placeholder="Email"
-          className="inputStyle"
         />
 
         <button onClick={handleSearch} className="btnStyle">
@@ -133,13 +133,13 @@ const Salespersons = () => {
                   {/* Ações: Links para detalhes e edição */}
                   <Link
                     to={`/vendedores/mostrar/${salesperson.id}`} // Rota para mostrar detalhes
-                    className="btnAction"
+                    className="btnAction info"
                   >
                     Detalhes
                   </Link>
                   <Link
                     to={`/vendedores/editar/${salesperson.id}`} // Rota para editar
-                    className="btnAction"
+                    className="btnAction warn"
                   >
                     Editar
                   </Link>
