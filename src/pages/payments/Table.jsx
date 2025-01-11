@@ -11,20 +11,25 @@ const Sales = () => {
     min_commission_value: "",
     max_commission_value: "",
     status: "",
+    start_date: "",
+    end_date: "",
   });
   const [data, setData] = useState([]);
   const [salespersons, setSalespersons] = useState([]);
   const [pagination, setPagination] = useState({
     current_page: 1,
-    per_page: 10,
+    per_page: 8,
     total_pages: 1,
     total_records: 0,
   });
   const [loading, setLoading] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const [showAdditionalFilters, setShowAdditionalFilters] = useState(false);
 
   useEffect(() => {
     fetchData();
-  }, [pagination.current_page, pagination.per_page]);
+  }, [pagination.current_page, pagination.per_page, filters]);
 
   useEffect(() => {
     const fetchSalespersons = async () => {
@@ -74,9 +79,13 @@ const Sales = () => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
   };
 
-  const handleSearch = () => {
-    setPagination({ ...pagination, current_page: 1 }); // Reinicia a página para 1 ao aplicar filtro
-    fetchData();
+  const handlePagination = (e) => {
+    const value = e.target.value;
+
+    setPagination((prevPagination) => ({
+      ...prevPagination,
+      per_page: value,
+    }));
   };
 
   const handlePageChange = (newPage) => {
@@ -85,17 +94,47 @@ const Sales = () => {
     }
   };
 
+  const handleShowModal = (customer) => {
+    setSelectedCustomer(customer);
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setSelectedCustomer(null);
+  };
+
+  const toggleAdditionalFilters = () => {
+    setShowAdditionalFilters(!showAdditionalFilters);
+  };
+
   return (
     <div className="container mx-auto px-4">
-      <h1 className="text-2xl font-bold my-4">Payments</h1>
+      <h1 className="text-2xl font-bold my-4">Vendas</h1>
 
       {/* Filters */}
-      <div className="mb-4">
+      <div className="filterStyle">
+        {/* Filtros que sempre aparecem */}
+        <input
+          type="date"
+          name="start_date"
+          value={filters.start_date}
+          placeholder="Data Inicial"
+          onChange={handleFilterChange}
+        />
+
+        <input
+          type="date"
+          name="end_date"
+          value={filters.end_date}
+          placeholder="Data Final"
+          onChange={handleFilterChange}
+        />
+
         <select
           name="salesperson_id"
           value={filters.salesperson_id}
           onChange={handleFilterChange}
-          className="inputStyle"
         >
           <option value="">Sem vendedor</option>
           {salespersons.map((salesperson) => (
@@ -104,59 +143,11 @@ const Sales = () => {
             </option>
           ))}
         </select>
-        <input
-          type="number"
-          name="min_value"
-          value={filters.min_value}
-          onChange={handleFilterChange}
-          placeholder="Valor min."
-          className="inputStyle"
-        />
-        <input
-          type="number"
-          name="max_value"
-          value={filters.max_value}
-          onChange={handleFilterChange}
-          placeholder="Valor máx."
-          className="inputStyle"
-        />
-        <input
-          type="number"
-          name="min_commission_percentage"
-          value={filters.min_commission_percentage}
-          onChange={handleFilterChange}
-          placeholder="Min Comissão %"
-          className="inputStyle"
-        />
-        <input
-          type="number"
-          name="max_commission_percentage"
-          value={filters.max_commission_percentage}
-          onChange={handleFilterChange}
-          placeholder="Max Comissão %"
-          className="inputStyle"
-        />
-        <input
-          type="number"
-          name="min_commission_value"
-          value={filters.min_commission_value}
-          onChange={handleFilterChange}
-          placeholder="Min valor de Comissão"
-          className="inputStyle"
-        />
-        <input
-          type="number"
-          name="max_commission_value"
-          value={filters.max_commission_value}
-          onChange={handleFilterChange}
-          placeholder="Max valor de Comissão"
-          className="inputStyle"
-        />
+
         <select
           name="status"
           value={filters.status}
           onChange={handleFilterChange}
-          className="inputStyle"
         >
           <option value="">Todos os Status</option>
           <option value="failed">Falhos</option>
@@ -168,16 +159,81 @@ const Sales = () => {
           name="gateway_used"
           value={filters.gateway_used}
           onChange={handleFilterChange}
-          className="inputStyle"
         >
           <option value="">Todos os gateways</option>
           <option value="mercado_pago">Mercado Pago</option>
           <option value="pagseguro">Pagseguro</option>
         </select>
 
-        <button onClick={handleSearch} className="btnStyle">
-          Search
+        {/* Botão para alternar a exibição dos filtros adicionais */}
+        <button
+          type="button"
+          onClick={toggleAdditionalFilters}
+          className="btnStyleNoBg"
+        >
+          {showAdditionalFilters ? "Menos filtros" : "Mais filtros"}
         </button>
+
+        {/* Filtros adicionais */}
+        {showAdditionalFilters && (
+          <>
+            <input
+              type="number"
+              name="min_value"
+              value={filters.min_value}
+              onChange={handleFilterChange}
+              placeholder="Valor min."
+            />
+
+            <input
+              type="number"
+              name="max_value"
+              value={filters.max_value}
+              onChange={handleFilterChange}
+              placeholder="Valor máx."
+            />
+
+            <input
+              type="number"
+              name="min_commission_percentage"
+              value={filters.min_commission_percentage}
+              onChange={handleFilterChange}
+              placeholder="Min Comissão %"
+            />
+
+            <input
+              type="number"
+              name="max_commission_percentage"
+              value={filters.max_commission_percentage}
+              onChange={handleFilterChange}
+              placeholder="Max Comissão %"
+            />
+
+            <input
+              type="number"
+              name="min_commission_value"
+              value={filters.min_commission_value}
+              onChange={handleFilterChange}
+              placeholder="Min valor de Comissão"
+            />
+
+            <input
+              type="number"
+              name="max_commission_value"
+              value={filters.max_commission_value}
+              onChange={handleFilterChange}
+              placeholder="Max valor de Comissão"
+            />
+
+            <input
+              type="number"
+              name="per_page"
+              value={pagination.per_page || ""}
+              onChange={handlePagination}
+              placeholder="Resultados por página"
+            />
+          </>
+        )}
       </div>
 
       {/* Table */}
@@ -187,18 +243,20 @@ const Sales = () => {
         <table className="tableStyle">
           <thead>
             <tr>
-              <th>Status</th>
               <th>Venda ID</th>
-              <th>Salesperson</th>
+              <th>Status</th>
+              <th>Vendedor</th>
               <th>Gateway</th>
-              <th>R$</th>
+              <th>R$ Valor</th>
               <th>Commissão %</th>
               <th>Comissão R$</th>
+              <th>Clientes</th>
             </tr>
           </thead>
           <tbody>
             {data.map((payment) => (
               <tr key={payment.id}>
+                <td>{payment.id}</td>
                 <td>
                   <span
                     className={`px-2 py-1 text-sm font-medium rounded ${
@@ -216,7 +274,6 @@ const Sales = () => {
                       : "Falhou"}
                   </span>
                 </td>
-                <td>{payment.id}</td>
                 <td>{payment.salesperson_id}</td>
                 <td>
                   {payment.gateway_used == "mercado_pago"
@@ -226,6 +283,14 @@ const Sales = () => {
                 <td>{payment.value}</td>
                 <td>{payment.commission_percentage_on_sale}</td>
                 <td>{payment.commission_value}</td>
+                <td>
+                  <button
+                    onClick={() => handleShowModal(payment.customer)}
+                    className="underline"
+                  >
+                    {payment.customer.name}
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
@@ -252,6 +317,27 @@ const Sales = () => {
           >
             Próximo
           </button>
+        </div>
+      )}
+
+      {/* Modal */}
+      {showModal && selectedCustomer && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg w-1/3">
+            <h2 className="text-xl font-bold mb-4">Detalhes do Cliente</h2>
+            <p>
+              <strong>Nome:</strong> {selectedCustomer.name}
+            </p>
+            <p>
+              <strong>Email:</strong> {selectedCustomer.email}
+            </p>
+            <p>
+              <strong>Telefone:</strong> {selectedCustomer.telephone}
+            </p>
+            <button onClick={handleCloseModal} className="btnStyle mt-4">
+              Fechar
+            </button>
+          </div>
         </div>
       )}
     </div>
