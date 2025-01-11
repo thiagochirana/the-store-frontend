@@ -37,7 +37,7 @@ const Create = () => {
           percentual_commission: "",
         });
       } else {
-        setMessage(response.data.errors || ["Erro desconhecido"]);
+        setErrors(response.data.errors || ["Erro desconhecido"]);
       }
     } catch (error) {
       if (error.response?.data?.errors) {
@@ -49,16 +49,18 @@ const Create = () => {
   };
   return (
     <div className="max-w-md mx-auto mt-10">
-      {message && <div className="text-green-600 mb-4">{message}</div>}
-      {errors.length > 0 && (
-        <ul className="text-red-600 mb-4">
-          {errors.map((error, index) => (
-            <li key={index}>{error}</li>
-          ))}
-        </ul>
-      )}
       <form onSubmit={handleSubmit} className="formStyle">
-        <h1 className="text-2xl font-bold mb-4">Cadastrar Vendedor</h1>
+        <h1 className="text-2xl font-bold ">Cadastrar Vendedor</h1>
+
+        {message && <div className="text-green-600">{message}</div>}
+        {errors.length > 0 && (
+          <ul className="text-red-600">
+            {errors.map((error, index) => (
+              <li key={index}>{error}</li>
+            ))}
+          </ul>
+        )}
+
         <div>
           <label htmlFor="name">Nome</label>
           <input

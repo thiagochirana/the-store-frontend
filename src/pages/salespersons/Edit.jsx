@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import ApiRb from "../../services/BackendService";
 
 const EditSalesperson = () => {
@@ -34,7 +34,11 @@ const EditSalesperson = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    if (name == "percentual_commission") {
+      setFormData({ ...formData, [name]: (value < 0 ? 0 : value) });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -42,20 +46,21 @@ const EditSalesperson = () => {
     setMessage("");
 
     try {
-      const response = await ApiRb.put(`/shopowner/salespersons/update`, formData);
-      setMessage(response.data.message)
-
+      const response = await ApiRb.put(
+        `/shopowner/salespersons/update`,
+        formData
+      );
+      setMessage(response.data.message);
     } catch (error) {
-      setMessage(error.response.data.errors|| ["Erro desconhecido"]);
+      setMessage(error.response.data.errors || ["Erro desconhecido"]);
     }
   };
 
   return (
     <div>
-      {message && <div className="text-green-600 mb-4">{message}</div>}
-
       <form onSubmit={handleSubmit} className="formStyle">
         <h1 className="text-2xl font-bold mb-4">Editar Vendedor</h1>
+        {message && <div className="text-green-600 mb-4">{message}</div>}
         <input type="hidden" name="user_id" value={formData.user_id}></input>
         <div>
           <label>Nome</label>
@@ -78,15 +83,19 @@ const EditSalesperson = () => {
           />
         </div>
         <div>
-          <label>Comissão (%)</label>
+          <label>Comissão %</label>
           <input
             type="number"
             name="percentual_commission"
             value={formData.percentual_commission}
             onChange={handleChange}
+            required
           />
         </div>
         <button type="submit">Salvar</button>
+        <a href="/vendedores" className="w-full text-green-500">
+          Voltar
+        </a>
       </form>
     </div>
   );

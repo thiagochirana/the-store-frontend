@@ -3,7 +3,6 @@ import { login } from '../features/auth/authSlice';
 
 import LoginForm from '../components/auth/login/Form';
 
-
 const SessionPage = () => {
   const dispatch = useDispatch();
   const { status, errors } = useSelector((state) => state.auth);
@@ -13,9 +12,8 @@ const SessionPage = () => {
   };
 
   return (
-    <div className="min-h-screen py-6 flex flex-col justify-center sm:py-12">
-      <div className="relative py-3 sm:max-w-xl sm:mx-auto">
-        <h1 className="text-2xl font-bold text-center mb-4">Acesso</h1>
+    <div className="min-h-screen flex flex-col justify-center">
+      <div className="">
         <LoginForm 
           onSubmit={handleLogin}
           isLoading={status === 'loading'}

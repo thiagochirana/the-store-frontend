@@ -30,13 +30,16 @@ const Header = () => {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex space-x-6 relative">
-          {/* Vendas Dropdown */}
+          <a href="/" className="navLink">
+            Dashboard
+          </a>
+          {/* Pagamentos Dropdown */}
           <div className="relative">
             <button
               onClick={() => toggleDropdown(setIsVendasDropdownOpen)}
               className="flex items-center space-x-2 navLink"
             >
-              <span>Vendas</span>
+              <span>Pagamentos</span>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className={`h-4 w-4 transition-transform ${
@@ -59,7 +62,7 @@ const Header = () => {
                 <ul className="flex flex-col p-2">
                   <li>
                     <a
-                      href="/vendas"
+                      href="/pagamentos"
                       className="block px-4 py-2 text-white hover:bg-green-500 rounded"
                     >
                       Mostrar
@@ -67,7 +70,7 @@ const Header = () => {
                   </li>
                   <li>
                     <a
-                      href="/vendas/lancamento"
+                      href="/pagamentos/lancamento"
                       className="block px-4 py-2 text-white hover:bg-green-500 rounded"
                     >
                       Nova
@@ -203,7 +206,7 @@ const Header = () => {
           <ul className="flex flex-col space-y-4 p-4">
             <li>
               <a
-                href="/vendas"
+                href="/pagamentos"
                 className="block text-white hover:text-green-700 transition duration-200"
               >
                 Mostrar
@@ -211,7 +214,7 @@ const Header = () => {
             </li>
             <li>
               <a
-                href="/vendas/lancamento"
+                href="/pagamentos/lancamento"
                 className="block text-white hover:text-green-700 transition duration-200"
               >
                 Nova

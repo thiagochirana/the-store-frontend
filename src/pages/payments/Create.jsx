@@ -13,6 +13,7 @@ const CreatePayment = () => {
   const [loading, setLoading] = useState(false);
   const [salespersons, setSalespersons] = useState([]);
   const [message, setMessage] = useState("");
+  const [errors, setErrors] = useState([]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -42,6 +43,8 @@ const CreatePayment = () => {
     e.preventDefault();
     setLoading(true);
     setMessage("");
+    setErrors([]);
+
     try {
       const response = await ApiRb.post("/payments/create", {
         salesperson_id: formData.salesperson_id || null,
@@ -59,9 +62,7 @@ const CreatePayment = () => {
 
       setMessage(response.data.message || "Pagamento criado com sucesso!");
     } catch (error) {
-      setMessage(
-        error.response?.data?.errors?.join(", ") || "Erro ao criar pagamento."
-      );
+      setErrors(error.response.data.errors || ['Houve erro ao criar um pagamento']);
     } finally {
       setLoading(false);
     }
@@ -70,10 +71,15 @@ const CreatePayment = () => {
   return (
     <div>
       <form onSubmit={handleSubmit} className="formStyle">
-        {message && <p className="mt-4 text-red-500">{message}</p>}
-
-        <h1 className="text-2xl font-bold">Criar Pagamento</h1>
-
+        <h1 className="text-2xl font-bold">Lançar Pagamento</h1>
+        {message && <p className="text-green-500">{message}</p>}
+        {errors.length > 0 && (
+          <ul className="text-red-600 mb-4">
+            {errors.map((error, index) => (
+              <li key={index}>{error}</li>
+            ))}
+          </ul>
+        )}
         <div className="grid grid-cols-2 gap-4">
           <div>
             <label>Vendedor</label>

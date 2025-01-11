@@ -82,6 +82,10 @@ const Salespersons = () => {
     }
   };
 
+  const formatToPercentage = (value) => {
+    return `${value.toFixed(2)}%`;
+  };
+
   return (
     <div className="container mx-auto px-4">
       <h1 className="text-2xl font-bold my-4">Vendedores</h1>
@@ -128,7 +132,7 @@ const Salespersons = () => {
                 <td>{salesperson.id}</td>
                 <td>{salesperson.name}</td>
                 <td>{salesperson.email}</td>
-                <td>{salesperson.commission_percentage}</td>
+                <td>{formatToPercentage(salesperson.commission_percentage)}</td>
                 <td>
                   {/* Ações: Links para detalhes e edição */}
                   <Link

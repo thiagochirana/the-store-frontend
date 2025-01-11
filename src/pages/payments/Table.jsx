@@ -108,9 +108,20 @@ const Sales = () => {
     setShowAdditionalFilters(!showAdditionalFilters);
   };
 
+  const formatToCurrency = (value) => {
+    return value.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    });
+  };
+
+  const formatToPercentage = (value) => {
+    return `${value.toFixed(2)}%`;
+  };
+
   return (
     <div className="container mx-auto px-4">
-      <h1 className="text-2xl font-bold my-4">Vendas</h1>
+      <h1 className="text-2xl font-bold my-4">Pagamentos</h1>
 
       {/* Filters */}
       <div className="filterStyle">
@@ -243,14 +254,14 @@ const Sales = () => {
         <table className="tableStyle">
           <thead>
             <tr>
-              <th>Venda ID</th>
+              <th>Pagamento ID</th>
               <th>Status</th>
               <th>Vendedor</th>
-              <th>Gateway</th>
+              <th>Gateway Utilizado</th>
               <th>R$ Valor</th>
               <th>Commissão %</th>
               <th>Comissão R$</th>
-              <th>Clientes</th>
+              <th>Cliente</th>
             </tr>
           </thead>
           <tbody>
@@ -280,13 +291,13 @@ const Sales = () => {
                     ? "Mercado Pago"
                     : "PagSeguro"}
                 </td>
-                <td>{payment.value}</td>
-                <td>{payment.commission_percentage_on_sale}</td>
-                <td>{payment.commission_value}</td>
+                <td>{formatToCurrency(payment.value)}</td>
+                <td>{formatToPercentage(payment.commission_percentage_on_sale)}</td>
+                <td>{formatToCurrency(payment.commission_value)}</td>
                 <td>
                   <button
                     onClick={() => handleShowModal(payment.customer)}
-                    className="underline"
+                    className="underline hover:text-green-400 transition duration-150"
                   >
                     {payment.customer.name}
                   </button>

@@ -1,7 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-
 const API_BASE_URL = 'http://localhost:3000/backend/v1/auth/login';
 
 export const login = createAsyncThunk('auth/login', async (credentials, thunkAPI) => {
@@ -12,7 +11,7 @@ export const login = createAsyncThunk('auth/login', async (credentials, thunkAPI
     return {
       access_token: response.data.access_token,
       refresh_token: response.data.refresh_token,
-      user: decodedToken, // Decodificado do token
+      user: decodedToken,
       message: response.data.message,
     };
   } catch (error) {
@@ -27,7 +26,7 @@ export const refreshToken = createAsyncThunk('auth/refreshToken', async (_, thun
     return {
       access_token: response.data.access_token,
       refresh_token: response.data.refresh_token,
-      user: decodedToken, // Decodificado do token
+      user: decodedToken,
       message: response.data.message,
     };
   } catch (error) {
@@ -65,7 +64,7 @@ const authSlice = createSlice({
         state.status = 'succeeded';
         state.access_token = action.payload.access_token;
         state.refresh_token = action.payload.refresh_token;
-        state.user = action.payload.user; // Dados do usuário
+        state.user = action.payload.user;
         state.message = action.payload.message;
         state.errors = [];
       })
@@ -76,7 +75,7 @@ const authSlice = createSlice({
       .addCase(refreshToken.fulfilled, (state, action) => {
         state.access_token = action.payload.access_token;
         state.refresh_token = action.payload.refresh_token;
-        state.user = action.payload.user; // Dados do usuário
+        state.user = action.payload.user;
         state.message = action.payload.message;
       })
       .addCase(refreshToken.rejected, (state, action) => {
