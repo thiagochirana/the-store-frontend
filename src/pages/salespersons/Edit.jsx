@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import ApiRb from "../../services/BackendService";
 
 const EditSalesperson = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
+  const [message, setMessage] = useState("");
   const [formData, setFormData] = useState({
+    user_id: "",
     name: "",
     email: "",
     percentual_commission: "",
@@ -18,6 +19,7 @@ const EditSalesperson = () => {
           user_id: id,
         });
         setFormData({
+          user_id: response.data.id,
           name: response.data.name,
           email: response.data.email,
           percentual_commission: response.data.commission_percentage,
@@ -37,18 +39,24 @@ const EditSalesperson = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setMessage("");
+
     try {
-      await ApiRb.put(`/shopowner/salespersons/${id}`, formData);
-      navigate.push("/vendedores");
+      const response = await ApiRb.put(`/shopowner/salespersons/update`, formData);
+      setMessage(response.data.message)
+
     } catch (error) {
-      console.error("Erro ao editar vendedor:", error);
+      setMessage(error.response.data.errors|| ["Erro desconhecido"]);
     }
   };
 
   return (
     <div>
-      <h2>Editar Vendedor</h2>
-      <form onSubmit={handleSubmit}>
+      {message && <div className="text-green-600 mb-4">{message}</div>}
+
+      <form onSubmit={handleSubmit} className="formStyle">
+        <h1 className="text-2xl font-bold mb-4">Editar Vendedor</h1>
+        <input type="hidden" name="user_id" value={formData.user_id}></input>
         <div>
           <label>Nome</label>
           <input
