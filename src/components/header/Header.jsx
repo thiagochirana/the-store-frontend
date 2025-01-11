@@ -1,11 +1,14 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { logout } from "../../features/auth/authSlice";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isVendasDropdownOpen, setIsVendasDropdownOpen] = useState(false);
-  const [isVendedoresDropdownOpen, setIsVendedoresDropdownOpen] = useState(false);
+  const [isVendedoresDropdownOpen, setIsVendedoresDropdownOpen] =
+    useState(false);
   const authState = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
   if (!authState.access_token) {
     return null;
@@ -123,9 +126,53 @@ const Header = () => {
             )}
           </div>
 
-          <a href="/perfil" className="navLink">
-            Seu Perfil
-          </a>
+          {/* Seu Perfil */}
+          <div className="relative">
+            <button
+              onClick={() => toggleDropdown(setIsMenuOpen)}
+              className="flex items-center space-x-2 navLink"
+            >
+              <span>{authState.user?.name || "Perfil"}</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className={`h-4 w-4 transition-transform ${
+                  isMenuOpen ? "rotate-180" : "rotate-0"
+                }`}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M19 9l-7 7-7-7"
+                />
+              </svg>
+            </button>
+            {isMenuOpen && (
+              <div className="absolute top-full left-0 bg-green-600 shadow-lg rounded mt-2 z-10 transition-all">
+                <ul className="flex flex-col p-2">
+                  <li>
+                    <a
+                      href="/perfil"
+                      className="block px-4 py-2 text-white hover:bg-green-500 rounded"
+                    >
+                      Perfil
+                    </a>
+                  </li>
+                  <li>
+                    <button
+                      onClick={() => dispatch(logout())}
+                      className="block px-4 py-2 text-white hover:bg-green-500 rounded"
+                    >
+                      Sair
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            )}
+          </div>
         </nav>
 
         {/* Mobile Menu Button */}
