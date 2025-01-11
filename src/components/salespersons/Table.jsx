@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import ApiRb from "../../services/BackendService";
-import { Link } from "react-router-dom"; // Importa o Link para navegação
+import { Link } from "react-router-dom";
 
 const Salespersons = () => {
   const [filters, setFilters] = useState({
@@ -39,7 +39,7 @@ const Salespersons = () => {
       const response = await ApiRb.get(
         `/shopowner/salespersons?${params.toString()}`
       );
-      // Verifica se a resposta é um array vazio ou um objeto com a estrutura esperada
+
       if (Array.isArray(response.data)) {
         setData([]);
         setPagination({
@@ -72,7 +72,7 @@ const Salespersons = () => {
   };
 
   const handleSearch = () => {
-    setPagination({ ...pagination, current_page: 1 }); // Reinicia a página para 1 ao aplicar filtro
+    setPagination({ ...pagination, current_page: 1 });
     fetchData();
   };
 
@@ -123,7 +123,7 @@ const Salespersons = () => {
               <th>Nome</th>
               <th>Email</th>
               <th>Comissão (%)</th>
-              <th>Ações</th> {/* Coluna de Ações */}
+              <th>Ações</th>
             </tr>
           </thead>
           <tbody>
@@ -134,15 +134,15 @@ const Salespersons = () => {
                 <td>{salesperson.email}</td>
                 <td>{formatToPercentage(salesperson.commission_percentage)}</td>
                 <td>
-                  {/* Ações: Links para detalhes e edição */}
+                  {/* Ações */}
                   <Link
-                    to={`/vendedores/mostrar/${salesperson.id}`} // Rota para mostrar detalhes
+                    to={`/vendedores/mostrar/${salesperson.id}`}
                     className="btnAction info"
                   >
                     Detalhes
                   </Link>
                   <Link
-                    to={`/vendedores/editar/${salesperson.id}`} // Rota para editar
+                    to={`/vendedores/editar/${salesperson.id}`} 
                     className="btnAction warn"
                   >
                     Editar

@@ -37,7 +37,9 @@ const HomePage = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const response = await ApiRb.get("/shopowner");
+        const router =
+          authState.user?.role === "shopowner" ? "/shopowner" : "/salesperson";
+        const response = await ApiRb.get(router);
         setDashboardData(response.data);
       } catch (error) {
         console.error(
@@ -83,7 +85,9 @@ const HomePage = () => {
       <h1 className="text-2xl font-bold mb-4 mt-8">Comissões</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="card bg-purple-100 p-4 rounded shadow">
-          <h2 className="text-lg font-semibold">Comissões Totais</h2>
+          <h2 className="text-lg font-semibold">
+            Comissões Totais (a partir de pagamentos aprovados)
+          </h2>
           <p className="text-2xl font-bold">
             {formatToCurrency(dashboardData.total_commission_value)}
           </p>

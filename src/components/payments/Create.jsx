@@ -22,7 +22,7 @@ const CreatePayment = () => {
   useEffect(() => {
     const fetchSalespersons = async () => {
       try {
-        const response = await ApiRb.get("/shopowner/salespersons");
+        const response = await ApiRb.get("/shopowner/salespersons/all");
         setSalespersons(response.data.salespersons);
       } catch (error) {
         console.error(
@@ -61,6 +61,14 @@ const CreatePayment = () => {
       });
 
       setMessage(response.data.message || "Pagamento criado com sucesso!");
+      setFormData({
+        salesperson_id: "",
+        customer_name: "",
+        customer_email: "",
+        value: "",
+        gateway_used: "mercado_pago",
+        custom_commission_percent: "",
+      })
     } catch (error) {
       setErrors(error.response.data.errors || ['Houve erro ao criar um pagamento']);
     } finally {
